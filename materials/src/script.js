@@ -15,7 +15,11 @@ const doorAmbientOcclusionTexture = textureLoader.load(
 );
 const doorMetalnessTexture = textureLoader.load("/textures/door/metalness.jpg");
 const doorRoughnessTexture = textureLoader.load("/textures/door/roughness.jpg");
-const matcapTexture = textureLoader.load("/textures/matcaps/1.png");
+const matcapTexture = textureLoader.load("/textures/matcaps/3.png");
+const gradientTexture = textureLoader.load("/textures/gradients/5.jpg");
+gradientTexture.minFilter = THREE.NearestFilter;
+gradientTexture.magFilter = THREE.NearestFilter;
+gradientTexture.generateMipmaps = false;
 
 /**
  * Base
@@ -28,17 +32,34 @@ const scene = new THREE.Scene();
 
 //Objects
 
-const material = new THREE.MeshBasicMaterial({
-  //   map: doorColorTexture,
-  //   color: "green",
-});
-material.map = doorColorTexture;
+// const material = new THREE.MeshBasicMaterial({
+//   //   map: doorColorTexture,
+//   //   color: "green",
+// });
+// material.map = doorColorTexture;
 // material.color = new THREE.Color(0xff00ff);
 // material.wireframe = true;
-material.opacity = 0.5;
-material.transparent = true;
-material.alphaMap = doorAlphaTexture;
-material.side = THREE.DoubleSide;
+// material.opacity = 0.5;
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
+// material.side = THREE.DoubleSide;
+
+// const material = new THREE.MeshNormalMaterial();
+// material.flatShading = true;
+
+//this gives the illusion that the objects are being illuminated
+// const material = new THREE.MeshMatcapMaterial();
+// material.matcap = matcapTexture;
+
+// const material = new THREE.MeshDepthMaterial();
+// const material = new THREE.MeshLambertMaterial();
+// const material = new THREE.MeshPhongMaterial();
+// material.shininess = 100;
+// material.specular = new THREE.Color(0x1188ff);
+
+//this makes the material look cartoonish
+const material = new THREE.MeshToonMaterial();
+material.gradientMap = gradientTexture;
 
 const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 16), material);
 sphere.position.x = -1.5;
@@ -52,6 +73,18 @@ const torus = new THREE.Mesh(
 torus.position.x = 1.5;
 
 scene.add(sphere, plane, torus);
+
+/**
+ * Lights
+ */
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const pointLight = new THREE.PointLight(0xffffff, 0.5);
+pointLight.position.x = 2;
+pointLight.position.y = 3;
+pointLight.position.z = 4;
+scene.add(pointLight);
 
 /**
  * Sizes
