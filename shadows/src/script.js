@@ -17,6 +17,8 @@ const scene = new THREE.Scene();
 /**
  * Lights
  */
+
+//ONLY Ambient, SPot and Directional Light can receive SHADOWS!!!
 // Ambient light
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 gui.add(ambientLight, "intensity").min(0).max(1).step(0.001);
@@ -30,6 +32,41 @@ gui.add(directionalLight.position, "x").min(-5).max(5).step(0.001);
 gui.add(directionalLight.position, "y").min(-5).max(5).step(0.001);
 gui.add(directionalLight.position, "z").min(-5).max(5).step(0.001);
 scene.add(directionalLight);
+directionalLight.castShadow = true;
+
+//access the mapSize property of the shadow to change the width and the height, by default is 512x512 but it can be changed
+directionalLight.shadow.mapSize.width = 1024;
+directionalLight.shadow.mapSize.height = 1024;
+
+//camera amplitude , The smaller the values, the more precise the shadow will be, but if it's too small the shadows will be cropped
+directionalLight.shadow.camera.top = 2;
+directionalLight.shadow.camera.right = 2;
+directionalLight.shadow.camera.bottom = -2;
+directionalLight.shadow.camera.left = -2;
+
+directionalLight.shadow.camera.far = 6;
+directionalLight.shadow.camera.near = 1;
+//blur
+directionalLight.shadow.radius = 10;
+
+// console.log(directionalLight.shadow.camera);
+
+const directionalLightCameraHelper = new THREE.CameraHelper(
+  directionalLight.shadow.camera
+);
+directionalLightCameraHelper.visible = false; // this will hade the camera helper
+scene.add(directionalLightCameraHelper);
+
+//Spot Light
+const spotLight = new THREE.SpotLight(0xffffff, 0.4, 10, Math.PI * 0.3);
+spotLight.position.set(0, 2, 2);
+spotLight.castShadow = true;
+scene.add(spotLight);
+scene.add(spotLight.target);
+
+//camera helper
+const spotLightCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
+scene.add(spotLightCameraHelper);
 
 /**
  * Materials
@@ -107,6 +144,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 // this will activate the shadow map
 renderer.shadowMap.enabled = true;
+
+//this will add smoothness to the edges of the shadow
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 /**
  * Animate
