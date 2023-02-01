@@ -15,12 +15,19 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 /**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader();
+const bakedShadow = textureLoader.load("/textures/bakedShadow.jpg");
+console.log(bakedShadow);
+
+/**
  * Lights
  */
 
 //ONLY Ambient, SPot and Directional Light can receive SHADOWS!!!
 // Ambient light
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
 gui.add(ambientLight, "intensity").min(0).max(1).step(0.001);
 scene.add(ambientLight);
 
@@ -32,7 +39,7 @@ gui.add(directionalLight.position, "x").min(-5).max(5).step(0.001);
 gui.add(directionalLight.position, "y").min(-5).max(5).step(0.001);
 gui.add(directionalLight.position, "z").min(-5).max(5).step(0.001);
 scene.add(directionalLight);
-directionalLight.castShadow = true;
+directionalLight.castShadow = false;
 
 //access the mapSize property of the shadow to change the width and the height, by default is 512x512 but it can be changed
 directionalLight.shadow.mapSize.width = 1024;
@@ -58,9 +65,9 @@ directionalLightCameraHelper.visible = false; // this will hade the camera helpe
 scene.add(directionalLightCameraHelper);
 
 //Spot Light
-const spotLight = new THREE.SpotLight(0xffffff, 0.4, 10, Math.PI * 0.3);
+const spotLight = new THREE.SpotLight(0xffffff, 0.3, 10, Math.PI * 0.3);
 spotLight.position.set(0, 2, 2);
-spotLight.castShadow = true;
+spotLight.castShadow = false;
 spotLight.shadow.mapSize.width = 1024;
 spotLight.shadow.mapSize.height = 1024;
 spotLight.shadow.camera.far = 6;
@@ -73,6 +80,20 @@ scene.add(spotLight.target);
 const spotLightCameraHelper = new THREE.CameraHelper(spotLight.shadow.camera);
 spotLightCameraHelper.visible = false;
 scene.add(spotLightCameraHelper);
+
+//Point Light
+const pointLight = new THREE.PointLight(0xffffff, 0.3);
+pointLight.castShadow = false;
+pointLight.shadow.mapSize.width = 1014;
+pointLight.shadow.mapSize.height = 1024;
+pointLight.shadow.camera.near = 0.1;
+pointLight.shadow.camera.far = 5;
+pointLight.position.set(-1, 1, 0);
+scene.add(pointLight);
+
+const pointLightCameraHelper = new THREE.CameraHelper(pointLight.shadow.camera);
+pointLightCameraHelper.visible = false;
+scene.add(pointLightCameraHelper);
 
 /**
  * Materials
@@ -89,7 +110,12 @@ const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.5, 32, 32), material);
 // the sphere has to be able to cast shadow
 sphere.castShadow = true;
 
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(5, 5), material);
+const plane = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshBasicMaterial({
+    map: bakedShadow,
+  })
+);
 plane.rotation.x = -Math.PI * 0.5;
 plane.position.y = -0.5;
 
