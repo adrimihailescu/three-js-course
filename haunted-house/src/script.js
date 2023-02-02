@@ -93,6 +93,32 @@ bush4.position.set(-1, 0.05, 2.6);
 
 house.add(bush1, bush2, bush3, bush4);
 
+/**
+ * Graves
+ */
+const graves = new THREE.Group();
+scene.add(graves);
+
+//create the graves from a box geometry and set the width, height and depth
+const gravesGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2);
+const gravesMaterial = new THREE.MeshStandardMaterial({ color: "#b2b6b1" });
+
+//create 50 graves and position them randomly around the house
+for (let i = 0; i < 50; i++) {
+  //create random angle around the house
+  const angle = Math.random() * Math.PI * 2;
+  //random distance to arrange the graves around the house
+  const radius = 3 + Math.random() * 6;
+  const x = Math.sin(angle) * radius;
+  const z = Math.cos(angle) * radius;
+  //create one grave
+  const grave = new THREE.Mesh(gravesGeometry, gravesMaterial);
+  grave.position.set(x, 0.3, z);
+  grave.rotation.y = (Math.random() - 0.5) * 0.4;
+  grave.rotation.z = (Math.random() - 0.5) * 0.4;
+  graves.add(grave);
+}
+
 // Temporary sphere
 // const sphere = new THREE.Mesh(
 //     new THREE.SphereGeometry(1, 32, 32),
