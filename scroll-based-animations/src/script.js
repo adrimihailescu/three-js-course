@@ -106,6 +106,14 @@ window.addEventListener("resize", () => {
 /**
  * Camera
  */
+
+/**
+ * Group
+ */
+//add a camera group so we can move the paralax with the camera
+const cameraGroup = new THREE.Group();
+scene.add(cameraGroup);
+
 // Base camera
 const camera = new THREE.PerspectiveCamera(
   35,
@@ -114,7 +122,8 @@ const camera = new THREE.PerspectiveCamera(
   100
 );
 camera.position.z = 6;
-scene.add(camera);
+//add the camera to the group camera so it can move at the same time
+cameraGroup.add(camera);
 
 /**
  * Renderer
@@ -137,6 +146,19 @@ window.addEventListener("scroll", () => {
 });
 
 /**
+ * Cursor
+ */
+const cursor = {};
+cursor.x = 0;
+cursor.y = 0;
+
+window.addEventListener("mousemove", (event) => {
+  cursor.x = event.clientX / sizes.width - 0.5;
+  cursor.y = event.clientY / sizes.height - 0.5;
+  console.log(cursor);
+});
+
+/**
  * Animate
  */
 const clock = new THREE.Clock();
@@ -145,7 +167,14 @@ const tick = () => {
   const elapsedTime = clock.getElapsedTime();
 
   //Animate camera
+  //move camera with the scroll
   camera.position.y = (-scrollY / sizes.height) * objectsDistance;
+
+  const parallaxX = cursor.x;
+  const parallaxY = -cursor.y;
+  //camera is moving inside the group
+  cameraGroup.position.x = parallaxX;
+  cameraGroup.position.y = parallaxY;
 
   //Animate meshes
   for (const mesh of sectionMeshes) {
