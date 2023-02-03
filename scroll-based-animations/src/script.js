@@ -155,16 +155,20 @@ cursor.y = 0;
 window.addEventListener("mousemove", (event) => {
   cursor.x = event.clientX / sizes.width - 0.5;
   cursor.y = event.clientY / sizes.height - 0.5;
-  console.log(cursor);
+  //   console.log(cursor);
 });
 
 /**
  * Animate
  */
 const clock = new THREE.Clock();
+let previousTime = 0;
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+  //we want to have same speed for all screen frequencies
+  const deltaTime = elapsedTime - previousTime;
+  previousTime = elapsedTime;
 
   //Animate camera
   //move camera with the scroll
@@ -172,9 +176,11 @@ const tick = () => {
 
   const parallaxX = cursor.x;
   const parallaxY = -cursor.y;
-  //camera is moving inside the group
-  cameraGroup.position.x = parallaxX;
-  cameraGroup.position.y = parallaxY;
+  //camera is moving inside the group at the same speed for all screen frequencies
+  cameraGroup.position.x +=
+    (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
+  cameraGroup.position.y +=
+    (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
 
   //Animate meshes
   for (const mesh of sectionMeshes) {
