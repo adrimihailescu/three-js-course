@@ -41,14 +41,38 @@ const environmentMapTexture = cubeTextureLoader.load([
 const world = new CANNON.World();
 world.gravity.set(0, -0.98, 0);
 
+//Materials
+const concreteMaterial = new CANNON.Material("concrete");
+const plasticMaterial = new CANNON.Material("plastic");
+
+const concretePlasticContactMaterial = new CANNON.ContactMaterial(
+  concreteMaterial,
+  plasticMaterial,
+  {
+    friction: 0.1,
+    restitution: 0.9,
+  }
+);
+world.addContactMaterial(concretePlasticContactMaterial);
+
 //Sphere
-const sphereShape = new CANNON.Sphere(0.5); // o.5 is the radius of the sphere
+const sphereShape = new CANNON.Sphere(0.5); // 0.5 is the radius of the sphere
 const sphereBody = new CANNON.Body({
   mass: 1,
   position: new CANNON.Vec3(0, 3, 0),
   shape: sphereShape,
+  material: plasticMaterial,
 });
 world.addBody(sphereBody);
+
+//Floor
+const floorShape = new CANNON.Plane();
+const floorBody = new CANNON.Body();
+floorBody.mass = 0; // this means that the floor will have a fix position
+floorBody.material = concreteMaterial;
+floorBody.addShape(floorShape);
+floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(-1, 0, 0), Math.PI * 0.5);
+world.addBody(floorBody);
 
 /**
  * Test sphere
