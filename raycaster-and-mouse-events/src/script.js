@@ -84,6 +84,23 @@ window.addEventListener("mousemove", (event) => {
   //   console.log(mouse.x);
 });
 
+window.addEventListener("click", () => {
+  if (currentIntersect) {
+    // console.log("click on a sphere");
+    switch (currentIntersect.object) {
+      case object1:
+        console.log("click on object 1");
+        break;
+      case object2:
+        console.log("click on object 2");
+        break;
+      case object3:
+        console.log("click on object 3");
+        break;
+    }
+  }
+});
+
 /**
  * Camera
  */
