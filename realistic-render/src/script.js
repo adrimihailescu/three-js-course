@@ -2,16 +2,19 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as dat from "lil-gui";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { Mesh } from "three";
 
 /**
  * Loader
  */
 const gltfLoader = new GLTFLoader();
+const cubeTextureLoader = new THREE.CubeTextureLoader();
 /**
  * Base
  */
 // Debug
 const gui = new dat.GUI();
+const debugObject = {};
 
 // Canvas
 const canvas = document.querySelector("canvas.webgl");
@@ -20,13 +23,51 @@ const canvas = document.querySelector("canvas.webgl");
 const scene = new THREE.Scene();
 
 /**
+ * Update ALl materials
+ */
+const updateAllMaterials = () => {
+  scene.traverse((child) => {
+    if (
+      child instanceof THREE.Mesh &&
+      child.material instanceof THREE.MeshStandardMaterial
+    ) {
+      // console.log(child);
+      child.material.envMap = environmentMap;
+      child.material.envMapIntensity = debugObject.envMapIntensity;
+    }
+  });
+};
+
+/**
  * Test sphere
  */
-const testSphere = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 32, 32),
-  new THREE.MeshStandardMaterial()
-);
-scene.add(testSphere);
+// const testSphere = new THREE.Mesh(
+//   new THREE.SphereGeometry(1, 32, 32),
+//   new THREE.MeshStandardMaterial()
+// );
+// scene.add(testSphere);
+
+/**
+ * Env Map
+ */
+const environmentMap = cubeTextureLoader.load([
+  "textures/environmentMaps/0/px.jpg",
+  "textures/environmentMaps/0/nx.jpg",
+  "textures/environmentMaps/0/py.jpg",
+  "textures/environmentMaps/0/ny.jpg",
+  "textures/environmentMaps/0/pz.jpg",
+  "textures/environmentMaps/0/nz.jpg",
+]);
+scene.background = environmentMap;
+debugObject.envMapIntensity = 5;
+gui
+  .add(debugObject, "envMapIntensity")
+  .min(0)
+  .max(10)
+  .step(0.001)
+  .onChange(() => {
+    updateAllMaterials();
+  });
 
 /**
  * Models
@@ -42,7 +83,10 @@ gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
     .max(Math.PI)
     .step(0.001)
     .name("rotation");
+
+  updateAllMaterials();
 });
+
 /**
  * Lights
  */
