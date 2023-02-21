@@ -34,6 +34,7 @@ const updateAllMaterials = () => {
       // console.log(child);
       child.material.envMap = environmentMap;
       child.material.envMapIntensity = debugObject.envMapIntensity;
+      // child.castShadow
     }
   });
 };
@@ -94,6 +95,7 @@ gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
 
 const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
 directionalLight.position.set(0.25, 3, -2.35);
+directionalLight.castShadow = true;
 scene.add(directionalLight);
 
 gui
@@ -165,13 +167,27 @@ controls.enableDamping = true;
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  antialias: true,
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.physicallyCorrectLights = true;
 //add outputEncoding to the renderer to control the output render encoding
 renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping = THREE.ReinhardToneMapping;
+renderer.toneMappingExposure = 3;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFShadowMap;
 
+gui.add(renderer, "toneMapping", {
+  No: THREE.NoToneMapping,
+  Linear: THREE.LinearToneMapping,
+  Reinhard: THREE.ReinhardToneMapping,
+  Cineon: THREE.CineonToneMapping,
+  ASCSFilmic: THREE.ACESFilmicToneMapping,
+});
+
+gui.add(renderer, "toneMappingExposure").min(0).max(10).step(0.001);
 /**
  * Animate
  */
