@@ -34,7 +34,8 @@ const updateAllMaterials = () => {
       // console.log(child);
       child.material.envMap = environmentMap;
       child.material.envMapIntensity = debugObject.envMapIntensity;
-      // child.castShadow
+      child.castShadow = true;
+      child.receiveShadow = true;
     }
   });
 };
@@ -74,9 +75,9 @@ gui
 /**
  * Models
  */
-gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
-  gltf.scene.scale.set(10, 10, 10);
-  gltf.scene.position.set(0, -4, 0);
+gltfLoader.load("/models/hamburger.glb", (gltf) => {
+  gltf.scene.scale.set(0.3, 0.3, 0.3);
+  gltf.scene.position.set(0, -1, 0);
   gltf.scene.rotation.y = Math.PI * 0.5;
   scene.add(gltf.scene);
   gui
@@ -96,6 +97,9 @@ gltfLoader.load("/models/FlightHelmet/glTF/FlightHelmet.gltf", (gltf) => {
 const directionalLight = new THREE.DirectionalLight("#ffffff", 3);
 directionalLight.position.set(0.25, 3, -2.35);
 directionalLight.castShadow = true;
+directionalLight.shadow.camera.far = 15;
+directionalLight.shadow.mapSize.set(1024, 1024);
+directionalLight.shadow.normalBias = 0.02;
 scene.add(directionalLight);
 
 gui
