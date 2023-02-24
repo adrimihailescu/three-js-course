@@ -99,6 +99,7 @@ directionalLight.position.set(0.25, 3, -2.35);
 directionalLight.castShadow = true;
 directionalLight.shadow.camera.far = 15;
 directionalLight.shadow.mapSize.set(1024, 1024);
+//this will remove the shadow on the burger's surface
 directionalLight.shadow.normalBias = 0.02;
 scene.add(directionalLight);
 
