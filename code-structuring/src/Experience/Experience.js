@@ -22,7 +22,7 @@ export default class Experience {
     this.scene = new THREE.Scene();
     //this will serve as a parameter to have access to the experience
     // this.camera = new Camera(this);
-    this.camera - new Camera();
+    this.camera = new Camera();
     // console.log(devicePixelRatio);
     //Sizes resize event
     this.sizes.on("resize", () => {
@@ -35,10 +35,11 @@ export default class Experience {
     });
   }
 
+  resize() {
+    // console.log("a resize has ocurred");
+    this.camera.resize();
+  }
   update() {
     // console.log("update the experience");
-  }
-  resize() {
-    console.log("a resize has ocurred");
   }
 }

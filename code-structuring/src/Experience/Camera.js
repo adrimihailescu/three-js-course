@@ -22,6 +22,7 @@ export default class Camera {
     // console.log(this);
     this.setInstance();
     this.setOrbitControls();
+    // this.resize();
   }
 
   setInstance() {
@@ -38,5 +39,11 @@ export default class Camera {
   setOrbitControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
     this.controls.enableDamping = true;
+  }
+
+  resize() {
+    // console.log("resize on the camera");
+    this.instance.aspect = this.sizes.width / this.sizes.height;
+    this.instance.updateProjectionMatrix();
   }
 }
