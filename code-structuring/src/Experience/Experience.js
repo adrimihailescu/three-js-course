@@ -2,6 +2,7 @@ import * as THREE from "three";
 import Sizes from "./Utils/Sizes";
 import Time from "./Utils/Time";
 import Camera from "./Camera";
+import Renderer from "./Renderer";
 
 let instance = null;
 export default class Experience {
@@ -23,6 +24,7 @@ export default class Experience {
     //this will serve as a parameter to have access to the experience
     // this.camera = new Camera(this);
     this.camera = new Camera();
+    this.renderer = new Renderer();
     // console.log(devicePixelRatio);
     //Sizes resize event
     this.sizes.on("resize", () => {
