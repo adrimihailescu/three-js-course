@@ -3,6 +3,7 @@ import Sizes from "./Utils/Sizes";
 import Time from "./Utils/Time";
 import Camera from "./Camera";
 import Renderer from "./Renderer";
+import World from "./World/World";
 
 let instance = null;
 export default class Experience {
@@ -25,6 +26,7 @@ export default class Experience {
     // this.camera = new Camera(this);
     this.camera = new Camera();
     this.renderer = new Renderer();
+    this.world = new World();
     // console.log(devicePixelRatio);
     //Sizes resize event
     this.sizes.on("resize", () => {
