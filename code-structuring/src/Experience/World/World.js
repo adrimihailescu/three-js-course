@@ -6,6 +6,8 @@ export default class World {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
+    this.resources = this.experience.resources;
+    // console.log(this.resources);
 
     // console.log(this.scene);
     //test mesh
@@ -13,9 +15,14 @@ export default class World {
       new THREE.BoxGeometry(1, 1, 1),
       new THREE.MeshStandardMaterial()
     );
-    this.scene?.add(testMesh);
+    this.scene.add(testMesh);
 
-    //Setup
-    this.environment = new Environment();
+    //wait for resources
+    this.resources.on("ready", () => {
+      // console.log("resources are ready");
+
+      //we can use the resources when everything is loaded
+      this.environment = new Environment();
+    });
   }
 }
