@@ -2,6 +2,7 @@ import Experience from "../Experience";
 import * as THREE from "three";
 import Environment from "./Environment";
 import Floor from "./Floor";
+import Fox from "./Fox";
 
 export default class World {
   constructor() {
@@ -24,6 +25,7 @@ export default class World {
 
       //we can use the resources when everything is loaded
       this.floor = new Floor();
+      this.fox = new Fox();
       this.environment = new Environment();
     });
   }
