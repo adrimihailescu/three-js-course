@@ -18,7 +18,6 @@ export default class World {
     //   new THREE.MeshStandardMaterial()
     // );
     // this.scene.add(testMesh);
-
     //wait for resources
     this.resources.on("ready", () => {
       // console.log("resources are ready");
@@ -28,5 +27,9 @@ export default class World {
       this.fox = new Fox();
       this.environment = new Environment();
     });
+  }
+  update() {
+    //check if there is a fox in the scene then call update()
+    if (this.fox) this.fox.update();
   }
 }

@@ -50,6 +50,7 @@ export default class Experience {
   update() {
     // console.log("update the experience");
     this.camera.update();
+    this.world.update();
     this.renderer.update();
   }
 }
