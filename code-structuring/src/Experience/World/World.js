@@ -1,6 +1,7 @@
 import Experience from "../Experience";
 import * as THREE from "three";
 import Environment from "./Environment";
+import Floor from "./Floor";
 
 export default class World {
   constructor() {
@@ -11,17 +12,18 @@ export default class World {
 
     // console.log(this.scene);
     //test mesh
-    const testMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(1, 1, 1),
-      new THREE.MeshStandardMaterial()
-    );
-    this.scene.add(testMesh);
+    // const testMesh = new THREE.Mesh(
+    //   new THREE.BoxGeometry(1, 1, 1),
+    //   new THREE.MeshStandardMaterial()
+    // );
+    // this.scene.add(testMesh);
 
     //wait for resources
     this.resources.on("ready", () => {
       // console.log("resources are ready");
 
       //we can use the resources when everything is loaded
+      this.floor = new Floor();
       this.environment = new Environment();
     });
   }
