@@ -7,6 +7,14 @@ float random (vec2 st) {
         43758.5453123);
 }
 
+vec2 rotate(vec2 uv, float rotation, vec2 mid)
+{
+    return vec2(
+      cos(rotation) * (uv.x - mid.x) + sin(rotation) * (uv.y - mid.y) + mid.x,
+      cos(rotation) * (uv.y - mid.y) - sin(rotation) * (uv.x - mid.x) + mid.y
+    );
+}
+
 void main()
 {
     //replace the x and y with vUv
@@ -119,7 +127,36 @@ void main()
     // float strenght = random(gridUv);
 
     //Pattern 24
-    float strenght = length(vUv);
+    // float strenght = length(vUv);
+
+    //Pattern 25
+    // float strenght = length(vUv - 0.5);
+    // float strenght = distance(vUv,  vec2(0.5));
+
+    //Pattern 26
+    // float strenght = 0.03 / distance(vUv, vec2(0.5));
+
+    // //Pattern 27
+    // vec2 lightUv = vec2(
+    //     vUv.x * 0.1 + 0.45,
+    //     vUv.y * 0.5 + 0.25
+    // );
+    // float strenght = 0.015 / distance(lightUv, vec2(0.5));
+
+    //Pattern 28
+    vec2 lightUvX = vec2(
+        vUv.x * 0.1 + 0.45,
+        vUv.y * 0.5 + 0.25
+    );
+    float lightX = 0.015 / distance(lightUvX, vec2(0.5));
+
+    vec2 lightUvY = vec2(
+        vUv.y * 0.1 + 0.45,
+        vUv.x * 0.5 + 0.25
+    );
+    float lightY = 0.015 / distance(lightUvY, vec2(0.5));
+
+    float strenght = lightX * lightY;
 
     gl_FragColor = vec4(strenght, strenght, strenght, 1.0);
 }
