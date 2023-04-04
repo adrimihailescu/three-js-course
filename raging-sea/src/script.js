@@ -26,7 +26,7 @@ const waterGeometry = new THREE.PlaneGeometry(2, 2, 128, 128);
 const waterMaterial = new THREE.ShaderMaterial({
   vertexShader: waterVertexShader,
   fragmentShader: waterFragmentShader,
-  side: THREE.DoubleSide,
+  //   side: THREE.DoubleSide,
 });
 
 // Mesh
