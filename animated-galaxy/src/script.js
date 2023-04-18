@@ -107,7 +107,8 @@ const generateGalaxy = () => {
     vertexShader: galaxyVertexShader,
     fragmentShader: galaxyFragmentShader,
     uniforms: {
-      uSize: { value: 8 * renderer.getPixelRatio() },
+      uSize: { value: 30 * renderer.getPixelRatio() },
+      uTime: { value: 0 },
     },
   });
 
@@ -201,7 +202,11 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
+/**
+ * Generate first galaxy
+ */
 generateGalaxy();
+
 /**
  * Animate
  */
@@ -209,6 +214,7 @@ const clock = new THREE.Clock();
 
 const tick = () => {
   const elapsedTime = clock.getElapsedTime();
+  material.uniforms.uTime.value = elapsedTime;
 
   // Update controls
   controls.update();
