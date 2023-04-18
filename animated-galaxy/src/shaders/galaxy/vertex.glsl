@@ -2,6 +2,7 @@
  uniform float uSize;
 
  attribute float aScale;
+ attribute vec3 aRandomness;
 
  varying vec3 vColor;
  
@@ -19,6 +20,12 @@
             modelPosition.x = cos(angle) * distanceCenter;
             // modelPosition.y = sin(angle); potential background
             modelPosition.z = sin(angle) * distanceCenter;
+
+            //Randomness
+            // modelPosition.x += aRandomness.x;
+            // modelPosition.y += aRandomness.y;
+            // modelPosition.z += aRandomness.z;
+            modelPosition.xyz += aRandomness;
 
             vec4 viewPosition = viewMatrix * modelPosition;
             vec4 projectedPosition = projectionMatrix * viewPosition;
