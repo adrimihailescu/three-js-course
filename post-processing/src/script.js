@@ -3,6 +3,10 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
+import { DotScreenPass } from "three/examples/jsm/postprocessing/DotScreenPass.js";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
 import * as dat from "lil-gui";
 
 /**
@@ -140,6 +144,16 @@ effectComposer.setSize(sizes.width, sizes.height);
 
 const renderPass = new RenderPass(scene, camera);
 effectComposer.addPass(renderPass);
+
+// const dotScreenPass = new DotScreenPass();
+// effectComposer.addPass(dotScreenPass);
+
+const glitchPass = new GlitchPass();
+glitchPass.enabled = false;
+effectComposer.addPass(glitchPass);
+
+const rgbShitPass = new ShaderPass(RGBShiftShader);
+effectComposer.addPass(rgbShitPass);
 
 /**
  * Animate
