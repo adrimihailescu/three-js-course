@@ -7,6 +7,7 @@ import { DotScreenPass } from "three/examples/jsm/postprocessing/DotScreenPass.j
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass.js";
 import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader.js";
 import * as dat from "lil-gui";
@@ -167,7 +168,7 @@ dotScreenPass.enabled = false;
 effectComposer.addPass(dotScreenPass);
 
 const glitchPass = new GlitchPass();
-glitchPass.enabled = true;
+glitchPass.enabled = false;
 effectComposer.addPass(glitchPass);
 
 const rgbShitPass = new ShaderPass(RGBShiftShader);
@@ -176,6 +177,17 @@ effectComposer.addPass(rgbShitPass);
 
 const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 effectComposer.addPass(gammaCorrectionPass);
+
+const unrealBLoomPass = new UnrealBloomPass();
+unrealBLoomPass.strength = 0.3;
+unrealBLoomPass.radius = 1;
+unrealBLoomPass.threshold = 0.6;
+effectComposer.addPass(unrealBLoomPass);
+
+gui.add(unrealBLoomPass, "enabled");
+gui.add(unrealBLoomPass, "strength").min(0).max(2).step(0.001);
+gui.add(unrealBLoomPass, "radius").min(0).max(2).step(0.001);
+gui.add(unrealBLoomPass, "threshold").min(0).max(1).step(0.001);
 
 //2nd option for fixing antialising but not needed if the pixel ratio is higher than 1
 console.log(renderer.capabilities);
