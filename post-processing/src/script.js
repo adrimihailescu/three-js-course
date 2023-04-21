@@ -143,7 +143,18 @@ renderer.toneMappingExposure = 1.5;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-const effectComposer = new EffectComposer(renderer);
+/**
+ * Post processing
+ */
+/**
+ * Render target
+ */
+//don't need this for devices with a pixel ratio higher than 1
+const renderTarget = new THREE.WebGLRenderTarget(800, 600, {
+  samples: renderer.getPixelRatio() === 1 ? 2 : 0, //this will set the antialising which is not part of effect composer
+});
+
+const effectComposer = new EffectComposer(renderer, renderTarget);
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 effectComposer.setSize(sizes.width, sizes.height);
 
