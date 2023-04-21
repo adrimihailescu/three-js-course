@@ -189,12 +189,67 @@ gui.add(unrealBLoomPass, "strength").min(0).max(2).step(0.001);
 gui.add(unrealBLoomPass, "radius").min(0).max(2).step(0.001);
 gui.add(unrealBLoomPass, "threshold").min(0).max(1).step(0.001);
 
+//Custom passes
+//Tint pass
+const TintShader = {
+  uniforms: {
+    tDiffuse: { value: null },
+    uTint: { value: null },
+  },
+  vertexShader: `
+  varying vec2 vUv;
+  void main()
+  {
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    vUv = uv;
+  }
+  `,
+  fragmentShader: `
+  uniform sampler2D tDiffuse;
+  uniform vec3 uTint;
+  varying vec2 vUv;
+
+  void main()
+  {
+    vec4 color = texture2D(tDiffuse, vUv);
+    // color.r += 0.1; 
+    // color.b += 0.1; 
+    // color.g += 0.1; 
+    color.rgb += uTint;
+    gl_FragColor = color;
+  }
+  `,
+};
+
+const tintPass = new ShaderPass(TintShader);
+tintPass.material.uniforms.uTint.value = new THREE.Vector3();
+effectComposer.addPass(tintPass);
+
 //2nd option for fixing antialising but not needed if the pixel ratio is higher than 1
-console.log(renderer.capabilities);
+// console.log(renderer.capabilities);
 if (renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2) {
   const smaaPass = new SMAAPass();
   effectComposer.addPass(smaaPass);
 }
+
+gui
+  .add(tintPass.material.uniforms.uTint.value, "x")
+  .min(-1)
+  .max(1)
+  .step(0.001)
+  .name("red");
+gui
+  .add(tintPass.material.uniforms.uTint.value, "y")
+  .min(-1)
+  .max(1)
+  .step(0.001)
+  .name("green");
+gui
+  .add(tintPass.material.uniforms.uTint.value, "z")
+  .min(-1)
+  .max(1)
+  .step(0.001)
+  .name("blue");
 
 /**
  * Animate
