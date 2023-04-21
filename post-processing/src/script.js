@@ -6,6 +6,7 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { DotScreenPass } from "three/examples/jsm/postprocessing/DotScreenPass.js";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { SMAAPass } from "three/examples/jsm/postprocessing/SMAAPass.js";
 import { RGBShiftShader } from "three/examples/jsm/shaders/RGBShiftShader.js";
 import { GammaCorrectionShader } from "three/examples/jsm/shaders/GammaCorrectionShader.js";
 import * as dat from "lil-gui";
@@ -151,7 +152,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  */
 //don't need this for devices with a pixel ratio higher than 1
 const renderTarget = new THREE.WebGLRenderTarget(800, 600, {
-  samples: renderer.getPixelRatio() === 1 ? 2 : 0, //this will set the antialising which is not part of effect composer
+  // samples: renderer.getPixelRatio() === 1 ? 2 : 0, //this will set the antialising which is not part of effect composer
 });
 
 const effectComposer = new EffectComposer(renderer, renderTarget);
@@ -175,6 +176,13 @@ effectComposer.addPass(rgbShitPass);
 
 const gammaCorrectionPass = new ShaderPass(GammaCorrectionShader);
 effectComposer.addPass(gammaCorrectionPass);
+
+//2nd option for fixing antialising but not needed if the pixel ratio is higher than 1
+console.log(renderer.capabilities);
+if (renderer.getPixelRatio() === 1 && !renderer.capabilities.isWebGL2) {
+  const smaaPass = new SMAAPass();
+  effectComposer.addPass(smaaPass);
+}
 
 /**
  * Animate
