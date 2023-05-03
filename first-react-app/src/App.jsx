@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import CLicker from "./Clicker";
 
 export default function App({ clickersCount }) {
@@ -6,6 +6,14 @@ export default function App({ clickersCount }) {
   const [hasClicker, setHasClicker] = useState(true);
 
   const [count, setCount] = useState(0);
+
+  const colors = useMemo(() => {
+    const colors = [];
+    for (let i = 0; i < clickersCount; i++)
+      colors.push(`hsl(${Math.random() * 360}deg, 100%, 70%)`);
+
+    return colors;
+  }, [clickersCount]);
 
   const toggleClickerClick = () => {
     setHasClicker(!hasClicker);
