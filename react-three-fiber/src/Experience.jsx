@@ -18,11 +18,13 @@ export default function Experience() {
   return (
     <>
       <orbitControls args={[camera, gl.domElement]} />
+      <directionalLight position={[1, 2, 3]} intensity={1.5} />
+      <ambientLight intensity={0.5} />
 
       <group ref={groupRef}>
         <mesh position-x={-2}>
           <sphereGeometry />
-          <meshBasicMaterial color="salmon" />
+          <meshStandardMaterial color="salmon" />
         </mesh>
 
         <mesh
@@ -32,7 +34,7 @@ export default function Experience() {
           rotation-y={Math.PI * 0.25}
         >
           <boxGeometry scale={1.5} />
-          <meshBasicMaterial args={[{ color: "red" }]} />
+          <meshStandardMaterial args={[{ color: "red" }]} />
           {/* <torusKnotGeometry />
         <meshNormalMaterial /> */}
         </mesh>
@@ -45,7 +47,7 @@ export default function Experience() {
         // ref={planeRef}
       >
         <planeGeometry />
-        <meshBasicMaterial color="greenyellow" />
+        <meshStandardMaterial color="greenyellow" />
       </mesh>
     </>
   );
