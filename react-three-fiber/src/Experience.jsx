@@ -12,6 +12,15 @@ export default function Experience() {
   const { camera, gl } = useThree();
   // console.log(camera, gl);
   useFrame((state, delta) => {
+    // console.log(state.camera);
+    // console.log(state.clock.elapsedTime);
+
+    // //change camera position to rotate , but deactivate orbitControls
+    // const angle = state.clock.elapsedTime;
+    // state.camera.position.x = Math.sin(angle) * 8;
+    // state.camera.position.z = Math.cos(angle) * 8;
+    // state.camera.lookAt(0, 0, 0); //this will tell the camera to look at the centre of the scene
+
     cubeRef.current.rotation.y += delta;
     // groupRef.current.rotation.y += delta; //this will rotate the group
   });
