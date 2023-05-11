@@ -1,4 +1,5 @@
 import {
+  MeshReflectorMaterial,
   Float,
   Text,
   Html,
@@ -38,7 +39,8 @@ export default function Experience() {
 
       <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" />
+        {/* <meshStandardMaterial color="greenyellow" /> */}
+        <MeshReflectorMaterial mirror={0.5} color="greenyellow" />
       </mesh>
       <Float speed={2}>
         <Text
