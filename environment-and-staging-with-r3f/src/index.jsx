@@ -40,7 +40,7 @@ root.render(
     }}
     // onCreated={created}
   >
-    <color args={["red"]} attach="background" />
+    {/* <color args={["red"]} attach="background" /> */}
     <Experience />
   </Canvas>
 );
