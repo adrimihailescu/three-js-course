@@ -1,9 +1,25 @@
 import { useFrame } from "@react-three/fiber";
-import { OrbitControls, useHelper } from "@react-three/drei";
+import {
+  OrbitControls,
+  useHelper,
+  BakeShadows,
+  softShadows,
+  //   SoftShadows,
+} from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
 import * as THREE from "three";
 
+//looks good but bad for performance
+softShadows({
+  frustum: 3.75,
+  size: 0.005,
+  near: 9.5,
+  samples: 17,
+  rings: 11,
+});
+
+//BakeShadow on the first render (the shadow of the cube will not move with the cube)
 export default function Experience() {
   const cube = useRef();
   const directionalLightRef = useRef();
@@ -15,6 +31,8 @@ export default function Experience() {
 
   return (
     <>
+      {/* <SoftShadows /> */}
+      {/* <BakeShadows /> */}
       <color args={["salmon"]} attach="background" />
 
       <Perf position="top-left" />
@@ -22,23 +40,36 @@ export default function Experience() {
       <OrbitControls makeDefault />
 
       <directionalLight
+        ref={directionalLightRef}
         position={[1, 2, 3]}
         intensity={1.5}
-        ref={directionalLightRef}
+        castShadow
+        shadow-mapSize={[1024, 1024]}
+        shadow-camera-near={1}
+        shadow-camera-far={10}
+        shadow-camera-top={5}
+        shadow-camera-right={5}
+        shadow-camera-bottom={-5}
+        shadow-camera-left={-5}
       />
       <ambientLight intensity={0.5} />
 
-      <mesh position-x={-2}>
+      <mesh castShadow position-x={-2}>
         <sphereGeometry />
         <meshStandardMaterial color="orange" />
       </mesh>
 
-      <mesh ref={cube} position-x={2} scale={1.5}>
+      <mesh ref={cube} castShadow position-x={2} scale={1.5}>
         <boxGeometry />
         <meshStandardMaterial color="mediumpurple" />
       </mesh>
 
-      <mesh position-y={-1} rotation-x={-Math.PI * 0.5} scale={10}>
+      <mesh
+        position-y={-1}
+        receiveShadow
+        rotation-x={-Math.PI * 0.5}
+        scale={10}
+      >
         <planeGeometry />
         <meshStandardMaterial color="greenyellow" />
       </mesh>
