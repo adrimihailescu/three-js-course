@@ -1,15 +1,29 @@
 import { OrbitControls } from "@react-three/drei";
-import { useControls } from "leva";
+import { button, useControls } from "leva";
 
 export default function Experience() {
-  const { position } = useControls({
+  const { position, color, visible } = useControls("sphere", {
     position: {
       value: { x: -2, y: 0 },
       step: 0.01,
       joystick: "invertY",
     },
+    color: "#ff0000",
+    visible: true,
+    clickMe: button(() => {
+      console.log("ok");
+    }),
+    choice: { options: ["a", "b", "c"] },
   });
-  console.log(position);
+
+  const { scale } = useControls("cube", {
+    scale: {
+      value: 1.5,
+      min: 0.01,
+      max: 5,
+      step: 0.01,
+    },
+  });
 
   return (
     <>
@@ -18,12 +32,12 @@ export default function Experience() {
       <directionalLight position={[1, 2, 3]} intensity={1.5} />
       <ambientLight intensity={0.5} />
 
-      <mesh position={[position.x, position.y, 0]}>
+      <mesh position={[position.x, position.y, 0]} visible={visible}>
         <sphereGeometry />
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial color={color} />
       </mesh>
 
-      <mesh position-x={2} scale={1.5}>
+      <mesh position-x={2} scale={scale}>
         <boxGeometry />
         <meshStandardMaterial color="mediumpurple" />
       </mesh>
