@@ -7,6 +7,7 @@ import {
   Sky,
   Environment,
   Lightformer,
+  Stage,
   // AccumulativeShadows,
   // RandomizedLight,
   // softShadows,
@@ -57,15 +58,15 @@ export default function Experience() {
     });
   return (
     <>
-      <Environment
-        // background // this will set the background of the environment
-        ground={{
-          height: envMapHeight,
-          radius: envMapRadius,
-          scale: envMapScale,
-        }}
-        // files={[
-        //   "./environmentMaps/2/px.jpg",
+      {/* <Environment */}
+      {/* // background // this will set the background of the environment
+        // ground={{ */}
+      {/* //   height: envMapHeight,
+        //   radius: envMapRadius,
+        //   scale: envMapScale,
+        // }}
+        // files={[ */}
+      {/* //   "./environmentMaps/2/px.jpg",
         //   "./environmentMaps/2/nx.jpg",
         //   "./environmentMaps/2/py.jpg",
         //   "./environmentMaps/2/ny.jpg",
@@ -73,9 +74,9 @@ export default function Experience() {
         //   "./environmentMaps/2/nz.jpg",
         // ]}
         // files={"./environmentMaps/the_sky_is_on_fire_2k.hdr"}
-        preset="sunset"
-      >
-        {/* <color args={["#000000"]} attach="background" />
+      //   preset="sunset"
+      // > */}
+      {/* <color args={["#000000"]} attach="background" />
         <Lightformer
           position-z={-5}
           scale={10}
@@ -83,11 +84,11 @@ export default function Experience() {
           intensity={10}
           form="ring"
         /> */}
-        {/* <mesh scale={10} position-z={-5}>
+      {/* <mesh scale={10} position-z={-5}>
           <planeGeometry />
           <meshBasicMaterial color={[2, 0, 0]} />
         </mesh> */}
-      </Environment>
+      {/* </Environment> */}
       {/* <SoftShadows
         frustum={3.75}
         size={0.005}
@@ -96,10 +97,8 @@ export default function Experience() {
         rings={11}
       /> */}
       {/* <BakeShadows /> */}
-      <color args={["salmon"]} attach="background" />
-
+      {/* // <color args={["salmon"]} attach="background" /> */}
       <Perf position="top-left" />
-
       <OrbitControls makeDefault />
       {/* <AccumulativeShadows
         position={[0, -0.99, 0]}
@@ -119,16 +118,15 @@ export default function Experience() {
           bias={0.001}
         />
       </AccumulativeShadows> */}
-      <ContactShadows
-        position={[0, -0.99, 0]}
-        scale={10}
-        resolution={512}
-        far={5}
-        color={color}
-        opacity={opacity}
-        blur={blur}
-      />
-
+      {/* <ContactShadows */}
+      {/* // position={[0, -0.99, 0]}
+      // scale={10}
+      // resolution={512}
+      // far={5}
+      // color={color}
+      // opacity={opacity}
+      // blur={blur}
+      // /> */}
       {/* <directionalLight
         ref={directionalLightRef}
         position={sunPosition}
@@ -144,23 +142,22 @@ export default function Experience() {
       /> */}
       {/* <ambientLight intensity={0.5} /> */}
       {/* <Sky sunPosition={sunPosition} /> */}
-
-      <mesh castShadow position-x={-2} position-y={1}>
-        <sphereGeometry />
-        <meshStandardMaterial
-          color="orange"
-          envMapIntensity={envMapIntensity}
-        />
-      </mesh>
-
-      <mesh ref={cube} castShadow position-x={2} scale={1.5} position-y={1}>
-        <boxGeometry />
-        <meshStandardMaterial
-          color="mediumpurple"
-          envMapIntensity={envMapIntensity}
-        />
-      </mesh>
-
+      <Stage contactShadow={{ opacity: 0.2, blur: 3 }} environment="sunset">
+        <mesh castShadow position-x={-2} position-y={1}>
+          <sphereGeometry />
+          <meshStandardMaterial
+            color="orange"
+            envMapIntensity={envMapIntensity}
+          />
+        </mesh>
+        <mesh ref={cube} castShadow position-x={2} scale={1.5} position-y={1}>
+          <boxGeometry />
+          <meshStandardMaterial
+            color="mediumpurple"
+            envMapIntensity={envMapIntensity}
+          />
+        </mesh>
+      </Stage>
       {/* <mesh
         position-y={0}
         // receiveShadow
