@@ -3,41 +3,69 @@ import {
   OrbitControls,
   useHelper,
   BakeShadows,
-  softShadows,
-  //   SoftShadows,
+  AccumulativeShadows,
+  RandomizedLight,
+  // softShadows,
+  // SoftShadows,
 } from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
 import * as THREE from "three";
 
 //looks good but bad for performance
-softShadows({
-  frustum: 3.75,
-  size: 0.005,
-  near: 9.5,
-  samples: 17,
-  rings: 11,
-});
+// softShadows({
+//   frustum: 3.75,
+//   size: 0.005,
+//   near: 9.5,
+//   samples: 17,
+//   rings: 11,
+// });
 
 //BakeShadow on the first render (the shadow of the cube will not move with the cube)
 export default function Experience() {
   const cube = useRef();
   const directionalLightRef = useRef();
-  useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1);
+  // useHelper(directionalLightRef, THREE.DirectionalLightHelper, 1);
 
   useFrame((state, delta) => {
+    const time = state.clock.elapsedTime;
+    cube.current.position.x = 2 + Math.sin(time);
     cube.current.rotation.y += delta * 0.2;
   });
 
   return (
     <>
-      {/* <SoftShadows /> */}
+      {/* <SoftShadows
+        frustum={3.75}
+        size={0.005}
+        near={9.5}
+        samples={17}
+        rings={11}
+      /> */}
       {/* <BakeShadows /> */}
       <color args={["salmon"]} attach="background" />
 
       <Perf position="top-left" />
 
       <OrbitControls makeDefault />
+      <AccumulativeShadows
+        position={[0, -0.99, 0]}
+        scale={10}
+        color="#316d39"
+        opacity={0.8}
+        frames={Infinity}
+        temporal
+        blend={100}
+      >
+        <RandomizedLight
+          position={[1, 2, 3]}
+          amount={8}
+          radius={1}
+          ambient={0.5}
+          intensity={1}
+          bias={0.001}
+        />
+      </AccumulativeShadows>
 
       <directionalLight
         ref={directionalLightRef}
@@ -66,7 +94,7 @@ export default function Experience() {
 
       <mesh
         position-y={-1}
-        receiveShadow
+        // receiveShadow
         rotation-x={-Math.PI * 0.5}
         scale={10}
       >
