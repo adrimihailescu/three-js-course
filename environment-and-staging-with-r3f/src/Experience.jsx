@@ -4,6 +4,7 @@ import {
   useHelper,
   BakeShadows,
   ContactShadows,
+  Sky,
   // AccumulativeShadows,
   // RandomizedLight,
   // softShadows,
@@ -39,6 +40,10 @@ export default function Experience() {
     color: "#000000",
     opacity: { value: 0.5, min: 0, max: 1 },
     blur: { value: 1, min: 0, max: 10 },
+  });
+
+  const { sunPosition } = useControls("sky", {
+    sunPosition: { value: [1, 2, 3] },
   });
   return (
     <>
@@ -85,7 +90,7 @@ export default function Experience() {
 
       <directionalLight
         ref={directionalLightRef}
-        position={[1, 2, 3]}
+        position={sunPosition}
         intensity={1.5}
         castShadow
         shadow-mapSize={[1024, 1024]}
@@ -97,6 +102,7 @@ export default function Experience() {
         shadow-camera-left={-5}
       />
       <ambientLight intensity={0.5} />
+      <Sky sunPosition={sunPosition} />
 
       <mesh castShadow position-x={-2}>
         <sphereGeometry />
