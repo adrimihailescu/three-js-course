@@ -6,6 +6,7 @@ import {
   ContactShadows,
   Sky,
   Environment,
+  Lightformer,
   // AccumulativeShadows,
   // RandomizedLight,
   // softShadows,
@@ -48,20 +49,36 @@ export default function Experience() {
   });
 
   const { envMapIntensity } = useControls("environment map", {
-    envMapIntensity: { value: 1, min: 0, max: 12 },
+    envMapIntensity: { value: 3.5, min: 0, max: 12 },
   });
   return (
     <>
       <Environment
-        files={[
-          "./environmentMaps/2/px.jpg",
-          "./environmentMaps/2/nx.jpg",
-          "./environmentMaps/2/py.jpg",
-          "./environmentMaps/2/ny.jpg",
-          "./environmentMaps/2/pz.jpg",
-          "./environmentMaps/2/nz.jpg",
-        ]}
-      />
+        background // this will set the background of the environment
+        // files={[
+        //   "./environmentMaps/2/px.jpg",
+        //   "./environmentMaps/2/nx.jpg",
+        //   "./environmentMaps/2/py.jpg",
+        //   "./environmentMaps/2/ny.jpg",
+        //   "./environmentMaps/2/pz.jpg",
+        //   "./environmentMaps/2/nz.jpg",
+        // ]}
+        // files={"./environmentMaps/the_sky_is_on_fire_2k.hdr"}
+        preset="sunset"
+      >
+        <color args={["#000000"]} attach="background" />
+        <Lightformer
+          position-z={-5}
+          scale={10}
+          color="red"
+          intensity={10}
+          form="ring"
+        />
+        {/* <mesh scale={10} position-z={-5}>
+          <planeGeometry />
+          <meshBasicMaterial color={[2, 0, 0]} />
+        </mesh> */}
+      </Environment>
       {/* <SoftShadows
         frustum={3.75}
         size={0.005}
