@@ -5,6 +5,7 @@ import {
   BakeShadows,
   ContactShadows,
   Sky,
+  Environment,
   // AccumulativeShadows,
   // RandomizedLight,
   // softShadows,
@@ -45,8 +46,22 @@ export default function Experience() {
   const { sunPosition } = useControls("sky", {
     sunPosition: { value: [1, 2, 3] },
   });
+
+  const { envMapIntensity } = useControls("environment map", {
+    envMapIntensity: { value: 1, min: 0, max: 12 },
+  });
   return (
     <>
+      <Environment
+        files={[
+          "./environmentMaps/2/px.jpg",
+          "./environmentMaps/2/nx.jpg",
+          "./environmentMaps/2/py.jpg",
+          "./environmentMaps/2/ny.jpg",
+          "./environmentMaps/2/pz.jpg",
+          "./environmentMaps/2/nz.jpg",
+        ]}
+      />
       {/* <SoftShadows
         frustum={3.75}
         size={0.005}
@@ -88,7 +103,7 @@ export default function Experience() {
         blur={blur}
       />
 
-      <directionalLight
+      {/* <directionalLight
         ref={directionalLightRef}
         position={sunPosition}
         intensity={1.5}
@@ -100,18 +115,24 @@ export default function Experience() {
         shadow-camera-right={5}
         shadow-camera-bottom={-5}
         shadow-camera-left={-5}
-      />
-      <ambientLight intensity={0.5} />
-      <Sky sunPosition={sunPosition} />
+      /> */}
+      {/* <ambientLight intensity={0.5} /> */}
+      {/* <Sky sunPosition={sunPosition} /> */}
 
       <mesh castShadow position-x={-2}>
         <sphereGeometry />
-        <meshStandardMaterial color="orange" />
+        <meshStandardMaterial
+          color="orange"
+          envMapIntensity={envMapIntensity}
+        />
       </mesh>
 
       <mesh ref={cube} castShadow position-x={2} scale={1.5}>
         <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
+        <meshStandardMaterial
+          color="mediumpurple"
+          envMapIntensity={envMapIntensity}
+        />
       </mesh>
 
       <mesh
@@ -121,7 +142,10 @@ export default function Experience() {
         scale={10}
       >
         <planeGeometry />
-        <meshStandardMaterial color="greenyellow" />
+        <meshStandardMaterial
+          color="greenyellow"
+          envMapIntensity={envMapIntensity}
+        />
       </mesh>
     </>
   );
