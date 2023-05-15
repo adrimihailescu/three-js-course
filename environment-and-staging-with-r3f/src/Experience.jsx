@@ -48,13 +48,22 @@ export default function Experience() {
     sunPosition: { value: [1, 2, 3] },
   });
 
-  const { envMapIntensity } = useControls("environment map", {
-    envMapIntensity: { value: 3.5, min: 0, max: 12 },
-  });
+  const { envMapIntensity, envMapHeight, envMapRadius, envMapScale } =
+    useControls("environment map", {
+      envMapIntensity: { value: 3.5, min: 0, max: 12 },
+      envMapHeight: { value: 7, min: 0, max: 100 },
+      envMapRadius: { value: 28, min: 10, max: 1000 },
+      envMapScale: { value: 100, min: 10, max: 1000 },
+    });
   return (
     <>
       <Environment
-        background // this will set the background of the environment
+        // background // this will set the background of the environment
+        ground={{
+          height: envMapHeight,
+          radius: envMapRadius,
+          scale: envMapScale,
+        }}
         // files={[
         //   "./environmentMaps/2/px.jpg",
         //   "./environmentMaps/2/nx.jpg",
@@ -66,14 +75,14 @@ export default function Experience() {
         // files={"./environmentMaps/the_sky_is_on_fire_2k.hdr"}
         preset="sunset"
       >
-        <color args={["#000000"]} attach="background" />
+        {/* <color args={["#000000"]} attach="background" />
         <Lightformer
           position-z={-5}
           scale={10}
           color="red"
           intensity={10}
           form="ring"
-        />
+        /> */}
         {/* <mesh scale={10} position-z={-5}>
           <planeGeometry />
           <meshBasicMaterial color={[2, 0, 0]} />
@@ -136,7 +145,7 @@ export default function Experience() {
       {/* <ambientLight intensity={0.5} /> */}
       {/* <Sky sunPosition={sunPosition} /> */}
 
-      <mesh castShadow position-x={-2}>
+      <mesh castShadow position-x={-2} position-y={1}>
         <sphereGeometry />
         <meshStandardMaterial
           color="orange"
@@ -144,7 +153,7 @@ export default function Experience() {
         />
       </mesh>
 
-      <mesh ref={cube} castShadow position-x={2} scale={1.5}>
+      <mesh ref={cube} castShadow position-x={2} scale={1.5} position-y={1}>
         <boxGeometry />
         <meshStandardMaterial
           color="mediumpurple"
@@ -152,8 +161,8 @@ export default function Experience() {
         />
       </mesh>
 
-      <mesh
-        position-y={-1}
+      {/* <mesh
+        position-y={0}
         // receiveShadow
         rotation-x={-Math.PI * 0.5}
         scale={10}
@@ -163,7 +172,7 @@ export default function Experience() {
           color="greenyellow"
           envMapIntensity={envMapIntensity}
         />
-      </mesh>
+      </mesh> */}
     </>
   );
 }
