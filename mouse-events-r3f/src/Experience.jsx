@@ -1,5 +1,5 @@
 import { useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import { OrbitControls, useGLTF, meshBounds } from "@react-three/drei";
 import { useRef } from "react";
 import Hamburger from "../../load-models/src/Hamburger";
 
@@ -36,6 +36,7 @@ export default function Experience() {
 
       <mesh
         ref={cube}
+        raycast={meshBounds}
         position-x={2}
         scale={1.5}
         onClick={eventHandler}
