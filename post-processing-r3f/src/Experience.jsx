@@ -5,13 +5,14 @@ import {
   Vignette,
   Glitch,
   Noise,
+  Bloom,
 } from "@react-three/postprocessing";
 import { BlendFunction, GlitchMode } from "postprocessing";
 
 export default function Experience() {
   return (
     <>
-      <color args={["#ffffff"]} attach="background" />
+      <color args={["#000000"]} attach="background" />
       <EffectComposer multisampling={8}>
         {/* <Vignette
           offset={0.3}
@@ -23,7 +24,12 @@ export default function Experience() {
           duration={[0.1, 0.3]}
           mode={GlitchMode.CONSTANT_MILD}
         /> */}
-        <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} />
+        {/* <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} /> */}
+        <Bloom
+          mipmapBlur
+          intensity={0.5}
+          luminanceThreshold={0} // this will make everything glow
+        />
       </EffectComposer>
 
       <Perf position="top-left" />
@@ -40,7 +46,13 @@ export default function Experience() {
 
       <mesh castShadow position-x={2} scale={1.5}>
         <boxGeometry />
-        <meshStandardMaterial color="mediumpurple" />
+        {/* <meshStandardMaterial
+          color="orange"
+          emissive="orange"
+          emissiveIntensity={2}
+          toneMapped={false}
+        /> */}
+        <meshBasicMaterial color={[1.5, 1, 4]} toneMapped={false} />
       </mesh>
 
       <mesh
