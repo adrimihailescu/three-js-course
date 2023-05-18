@@ -6,13 +6,16 @@ import {
   Glitch,
   Noise,
   Bloom,
+  DepthOfField,
 } from "@react-three/postprocessing";
 import { BlendFunction, GlitchMode } from "postprocessing";
+
+//DepthOfField nearly broke my laptop!!!
 
 export default function Experience() {
   return (
     <>
-      <color args={["#000000"]} attach="background" />
+      <color args={["#ffffff"]} attach="background" />
       <EffectComposer multisampling={8}>
         {/* <Vignette
           offset={0.3}
@@ -25,11 +28,12 @@ export default function Experience() {
           mode={GlitchMode.CONSTANT_MILD}
         /> */}
         {/* <Noise premultiply blendFunction={BlendFunction.SOFT_LIGHT} /> */}
-        <Bloom
+        {/* <Bloom
           mipmapBlur
           intensity={0.5}
           luminanceThreshold={0} // this will make everything glow
-        />
+        /> */}
+        {/* <DepthOfField focusDistance={0.025} focusLength={0.025} />  */}
       </EffectComposer>
 
       <Perf position="top-left" />
@@ -52,7 +56,8 @@ export default function Experience() {
           emissiveIntensity={2}
           toneMapped={false}
         /> */}
-        <meshBasicMaterial color={[1.5, 1, 4]} toneMapped={false} />
+        {/* <meshBasicMaterial color={[1.5, 1, 4]} toneMapped={false} /> */}
+        <meshStandardMaterial color="mediumpurple" />
       </mesh>
 
       <mesh
