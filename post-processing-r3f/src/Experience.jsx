@@ -1,5 +1,6 @@
 import { OrbitControls } from "@react-three/drei";
 import { Perf } from "r3f-perf";
+import { useRef } from "react";
 import {
   EffectComposer,
   Vignette,
@@ -16,6 +17,11 @@ import Drunk from "./Drunk";
 //DepthOfField nearly broke my laptop!!! Same as SSR! Bad performance!
 
 export default function Experience() {
+  const drunkProps = useControls("DrunkEffect", {
+    frequency: { value: 2, min: 1, max: 20 },
+    amplitude: { value: 0.1, min: 0, max: 1 },
+  });
+  const drunkRef = useRef();
   // const ssrProps = useControls("SSR Effect", {
   //   temporalResolve: true,
   //   STRETCH_MISSED_RAYS: true,
@@ -68,7 +74,7 @@ export default function Experience() {
         /> */}
         {/* <DepthOfField focusDistance={0.025} focusLength={0.025} />  */}
         {/* <SSR {...ssrProps} /> */}
-        <Drunk />
+        <Drunk {...drunkProps} ref={drunkRef} />
       </EffectComposer>
 
       <Perf position="top-left" />
