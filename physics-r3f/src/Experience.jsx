@@ -1,31 +1,42 @@
-import { OrbitControls } from '@react-three/drei'
-import { Perf } from 'r3f-perf'
+import { OrbitControls } from "@react-three/drei";
+import { Perf } from "r3f-perf";
+import { Debug, Physics, RigidBody } from "@react-three/rapier";
 
-export default function Experience()
-{
-    return <>
+export default function Experience() {
+  return (
+    <>
+      <Perf position="top-left" />
 
-        <Perf position="top-left" />
+      <OrbitControls makeDefault />
 
-        <OrbitControls makeDefault />
-
-        <directionalLight castShadow position={ [ 1, 2, 3 ] } intensity={ 1.5 } />
-        <ambientLight intensity={ 0.5 } />
-
-        <mesh castShadow position={ [ - 2, 2, 0 ] }>
+      <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} />
+      <ambientLight intensity={0.5} />
+      <Physics>
+        <Debug />
+        <RigidBody colliders="ball">
+          <mesh castShadow position={[0, 4, 0]}>
             <sphereGeometry />
             <meshStandardMaterial color="orange" />
-        </mesh>
-
-        <mesh castShadow position={ [ 2, 2, 0 ] }>
-            <boxGeometry />
+          </mesh>
+        </RigidBody>
+        <RigidBody colliders="trimesh">
+          <mesh
+            position={[0, 1, 0]}
+            castShadow
+            rotation={[Math.PI * 0.5, 0, 0]}
+          >
+            <torusGeometry args={[1, 0.5, 15, 32]} />
             <meshStandardMaterial color="mediumpurple" />
-        </mesh>
+          </mesh>
+        </RigidBody>
 
-        <mesh receiveShadow position-y={ - 1.25 }>
-            <boxGeometry args={ [ 10, 0.5, 10 ] } />
+        <RigidBody type="fixed">
+          <mesh receiveShadow position-y={-1.25}>
+            <boxGeometry args={[10, 0.5, 10]} />
             <meshStandardMaterial color="greenyellow" />
-        </mesh>
-
+          </mesh>
+        </RigidBody>
+      </Physics>
     </>
+  );
 }
