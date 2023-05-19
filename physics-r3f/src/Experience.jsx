@@ -1,4 +1,4 @@
-import { OrbitControls } from "@react-three/drei";
+import { OrbitControls, useGLTF } from "@react-three/drei";
 import { useRef, useState } from "react";
 import { Perf } from "r3f-perf";
 import { useFrame } from "@react-three/fiber";
@@ -8,6 +8,7 @@ import {
   RigidBody,
   CuboidCollider,
   BallCollider,
+  CylinderCollider,
 } from "@react-three/rapier";
 import * as THREE from "three";
 
@@ -16,6 +17,8 @@ export default function Experience() {
   console.log(hitSound);
   const cubeRef = useRef();
   const twister = useRef();
+
+  const hamburger = useGLTF("./hamburger.glb");
 
   useFrame((state) => {
     //rotate on each frame
@@ -110,6 +113,10 @@ export default function Experience() {
             <boxGeometry />
             <meshStandardMaterial color="red" />
           </mesh>
+        </RigidBody>
+        <RigidBody position={[0, 4, 0]} colliders={false}>
+          <primitive object={hamburger.scene} scale={0.25} />
+          <CylinderCollider args={[0.5, 1.25]} />
         </RigidBody>
       </Physics>
     </>
