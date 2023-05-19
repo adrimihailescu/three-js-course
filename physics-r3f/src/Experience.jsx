@@ -1,5 +1,5 @@
 import { OrbitControls } from "@react-three/drei";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Perf } from "r3f-perf";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -12,6 +12,8 @@ import {
 import * as THREE from "three";
 
 export default function Experience() {
+  const [hitSound] = useState(() => new Audio("./hit.mp3"));
+  console.log(hitSound);
   const cubeRef = useRef();
   const twister = useRef();
 
@@ -29,6 +31,13 @@ export default function Experience() {
     const z = Math.sin(angle) * 2;
     twister.current.setNextKinematicTranslation({ x: x, y: -0.8, z: z });
   });
+
+  const collisionEnter = () => {
+    // console.log("collision");
+    // hitSound.currentTime = 0;
+    // hitSound.volume = Math.random();
+    // hitSound.play();
+  };
 
   const cubeJump = () => {
     const mass = cubeRef.current.mass();
@@ -73,6 +82,10 @@ export default function Experience() {
           ref={cubeRef}
           friction={0}
           colliders={false}
+          onCollisionEnter={collisionEnter}
+          // onCollisionExit={}
+          // onSleep={}
+          // onWake={}
         >
           <mesh castShadow onClick={cubeJump}>
             <boxGeometry />
