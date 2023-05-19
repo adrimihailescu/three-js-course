@@ -16,11 +16,18 @@ export default function Experience() {
   const twister = useRef();
 
   useFrame((state) => {
+    //rotate on each frame
     const time = state.clock.getElapsedTime();
-    const eulerRotation = new THREE.Euler(0, time, 0);
+    const eulerRotation = new THREE.Euler(0, time * 3, 0);
     const quaternionRotation = new THREE.Quaternion();
     quaternionRotation.setFromEuler(eulerRotation);
     twister.current.setNextKinematicRotation(quaternionRotation);
+
+    //position on a circle
+    const angle = time * 0.5;
+    const x = Math.cos(angle) * 2;
+    const z = Math.sin(angle) * 2;
+    twister.current.setNextKinematicTranslation({ x: x, y: -0.8, z: z });
   });
 
   const cubeJump = () => {
