@@ -1,5 +1,5 @@
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Perf } from "r3f-perf";
 import { useFrame } from "@react-three/fiber";
 import {
@@ -52,6 +52,17 @@ export default function Experience() {
       z: Math.random() - 0.5,
     });
   };
+
+  const cubesCount = 3;
+  const cubes = useRef();
+
+  useEffect(() => {
+    //add matrixes for each instance
+    for (let i = 0; i < cubesCount; i++) {
+      const matrix = new THREE.Matrix4();
+      cubes.current.setMatrixAt(i, matrix); // provide the matrixes
+    }
+  }, []);
   return (
     <>
       <Perf position="top-left" />
@@ -118,6 +129,16 @@ export default function Experience() {
           <primitive object={hamburger.scene} scale={0.25} />
           <CylinderCollider args={[0.5, 1.25]} />
         </RigidBody>
+        <RigidBody type="fixed">
+          <CuboidCollider args={[5, 2, 0.5]} position={[0, 1, 5.5]} />
+          <CuboidCollider args={[5, 2, 0.5]} position={[0, 1, -5.5]} />
+          <CuboidCollider args={[0.5, 2, 5]} position={[5.5, 1, 0]} />
+          <CuboidCollider args={[0.5, 2, 5]} position={[-5.5, 1, 0]} />
+        </RigidBody>
+        <instancedMesh args={[null, null, cubesCount]} ref={cubes}>
+          <boxGeometry />
+          <meshBasicMaterial color="tomato" />
+        </instancedMesh>
       </Physics>
     </>
   );
