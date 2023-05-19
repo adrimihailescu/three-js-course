@@ -1,6 +1,7 @@
 import { OrbitControls } from "@react-three/drei";
 import { useRef } from "react";
 import { Perf } from "r3f-perf";
+import { useFrame } from "@react-three/fiber";
 import {
   Debug,
   Physics,
@@ -8,13 +9,24 @@ import {
   CuboidCollider,
   BallCollider,
 } from "@react-three/rapier";
+import * as THREE from "three";
 
 export default function Experience() {
   const cubeRef = useRef();
+  const twister = useRef();
+
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    const eulerRotation = new THREE.Euler(0, time, 0);
+    const quaternionRotation = new THREE.Quaternion();
+    quaternionRotation.setFromEuler(eulerRotation);
+    twister.current.setNextKinematicRotation(quaternionRotation);
+  });
 
   const cubeJump = () => {
+    const mass = cubeRef.current.mass();
     // console.log("jump");
-    cubeRef.current.applyImpulse({ x: 0, y: 5, z: 0 }); //this will make the cube jump on the y axis
+    cubeRef.current.applyImpulse({ x: 0, y: 5 * mass, z: 0 }); //this will make the cube jump on the y axis
     cubeRef.current.applyTorqueImpulse({
       x: Math.random() - 0.5,
       y: Math.random() - 0.5,
@@ -29,7 +41,7 @@ export default function Experience() {
 
       <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} />
       <ambientLight intensity={0.5} />
-      <Physics>
+      <Physics gravity={[0, -9.81, 0]}>
         <Debug />
         <RigidBody colliders="ball">
           <mesh castShadow position={[-1.5, 2, 0]}>
@@ -49,17 +61,34 @@ export default function Experience() {
             <meshStandardMaterial color="mediumpurple" />
           </mesh>
         </RigidBody> */}
-        <RigidBody position={[1.5, 2, 0]} ref={cubeRef}>
+        <RigidBody
+          position={[1.5, 2, 0]}
+          ref={cubeRef}
+          friction={0}
+          colliders={false}
+        >
           <mesh castShadow onClick={cubeJump}>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
           </mesh>
+          <CuboidCollider args={[0.5, 0.5, 0.5]} mass={2} />
         </RigidBody>
 
-        <RigidBody type="fixed">
+        <RigidBody type="fixed" friction={0.7}>
           <mesh receiveShadow position-y={-1.25}>
             <boxGeometry args={[10, 0.5, 10]} />
             <meshStandardMaterial color="greenyellow" />
+          </mesh>
+        </RigidBody>
+        <RigidBody
+          ref={twister}
+          position={[0, -0.8, 0]}
+          friction={0}
+          type="kinematicPosition"
+        >
+          <mesh scale={[0.4, 0.4, 3]} castShadow>
+            <boxGeometry />
+            <meshStandardMaterial color="red" />
           </mesh>
         </RigidBody>
       </Physics>
