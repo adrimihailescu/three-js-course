@@ -2,6 +2,7 @@ import { RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
 import { useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { useGLTF } from "@react-three/drei";
 
 //deactivate legacyMode on Three.js to set the same encoding for R3F
 THREE.ColorManagement.legacyMode = false;
@@ -31,6 +32,12 @@ function BlockStart({ position = [0, 0, 0] }) {
   );
 }
 function BlockEnd({ position = [0, 0, 0] }) {
+  const hamburger = useGLTF("./hamburger.glb");
+
+  //looping through the children of the hamburger(meshes) and activate the castShadow property
+  hamburger.scene.children.forEach((mesh) => {
+    mesh.castShadow = true;
+  });
   return (
     <group position={position}>
       {/**
@@ -43,6 +50,15 @@ function BlockEnd({ position = [0, 0, 0] }) {
         receiveShadow
         scale={[4, 0.2, 4]}
       />
+      <RigidBody
+        type="fixed"
+        colliders="hull"
+        restitution={0.2}
+        friction={0}
+        position={[0, 0.25, 0]}
+      >
+        <primitive object={hamburger.scene} scale={0.2} />
+      </RigidBody>
     </group>
   );
 }
