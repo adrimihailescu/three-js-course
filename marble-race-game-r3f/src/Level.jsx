@@ -1,4 +1,4 @@
-import { RigidBody } from "@react-three/rapier";
+import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import * as THREE from "three";
 import { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
@@ -243,6 +243,13 @@ function Bounds({ length = 1 }) {
           material={wallMaterial}
           scale={[4, 1.5, 0.3]}
           receiveShadow
+        />
+        {/**
+         * cuboid collider to make the floor solid so that the ball doesn't fall through
+         */}
+        <CuboidCollider
+          args={[2, 0.1, 2 * length]}
+          position={[0, -0.1, -(length * 2) + 2]}
         />
       </RigidBody>
     </>
