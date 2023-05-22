@@ -1,6 +1,6 @@
 import { RigidBody } from "@react-three/rapier";
 import * as THREE from "three";
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 
@@ -15,7 +15,7 @@ const floor2Material = new THREE.MeshStandardMaterial({ color: "greenyellow" });
 const obstacleMaterial = new THREE.MeshStandardMaterial({ color: "orangered" });
 const wallMaterial = new THREE.MeshStandardMaterial({ color: "slategrey" });
 
-function BlockStart({ position = [0, 0, 0] }) {
+export function BlockStart({ position = [0, 0, 0] }) {
   return (
     <group position={position}>
       {/**
@@ -31,7 +31,7 @@ function BlockStart({ position = [0, 0, 0] }) {
     </group>
   );
 }
-function BlockEnd({ position = [0, 0, 0] }) {
+export function BlockEnd({ position = [0, 0, 0] }) {
   const hamburger = useGLTF("./hamburger.glb");
 
   //looping through the children of the hamburger(meshes) and activate the castShadow property
@@ -62,7 +62,7 @@ function BlockEnd({ position = [0, 0, 0] }) {
     </group>
   );
 }
-function BLockSpinner({ position = [0, 0, 0] }) {
+export function BLockSpinner({ position = [0, 0, 0] }) {
   //create reference to the obstacle we want to animate
   const obstacle = useRef();
   //save speed in state
@@ -111,7 +111,7 @@ function BLockSpinner({ position = [0, 0, 0] }) {
     </group>
   );
 }
-function BlockLimbo({ position = [0, 0, 0] }) {
+export function BlockLimbo({ position = [0, 0, 0] }) {
   //create reference to the obstacle we want to animate
   const obstacle = useRef();
   // console.log(obstacle);
@@ -164,7 +164,7 @@ function BlockLimbo({ position = [0, 0, 0] }) {
     </group>
   );
 }
-function BlockAxe({ position = [0, 0, 0] }) {
+export function BlockAxe({ position = [0, 0, 0] }) {
   //create reference to the obstacle we want to animate
   const obstacle = useRef();
   // console.log(obstacle);
@@ -218,14 +218,35 @@ function BlockAxe({ position = [0, 0, 0] }) {
   );
 }
 
-export default function Level() {
+export function Level({
+  count = 5,
+  types = [BLockSpinner, BlockAxe, BlockLimbo],
+}) {
+  //create the trap blocks
+  // const count = 5
+  // //create type of blocks
+  // const types = [BLockSpinner, BlockAxe, BlockLimbo]
+  const blocks = useMemo(() => {
+    const blocks = [];
+
+    for (let i = 0; i < count; i++) {
+      const type = types[Math.floor(Math.random() * types.length)];
+
+      blocks.push(type);
+    }
+    return blocks;
+  }, [count, types]);
+
   return (
     <>
-      <BlockStart position={[0, 0, 16]} />
-      <BLockSpinner position={[0, 0, 12]} />
-      <BlockLimbo position={[0, 0, 8]} />
-      <BlockAxe position={[0, 0, 4]} />
-      <BlockEnd position={[0, 0, 0]} />
+      <BlockStart position={[0, 0, 0]} />
+      {/**
+       * mapping on the blocks and return them
+       */}
+      {blocks.map((Block, index) => (
+        <Block key={index} position={[0, 0, -(index + 1) * 4]} />
+      ))}
+      <BlockEnd position={[0, 0, -(count + 1) * 4]} />
     </>
   );
 }
