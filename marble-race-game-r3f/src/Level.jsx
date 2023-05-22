@@ -30,6 +30,22 @@ function BlockStart({ position = [0, 0, 0] }) {
     </group>
   );
 }
+function BlockEnd({ position = [0, 0, 0] }) {
+  return (
+    <group position={position}>
+      {/**
+       * Floor
+       */}
+      <mesh
+        geometry={boxGeometry}
+        material={floor1Material}
+        position={[0, 0, 0]}
+        receiveShadow
+        scale={[4, 0.2, 4]}
+      />
+    </group>
+  );
+}
 function BLockSpinner({ position = [0, 0, 0] }) {
   //create reference to the obstacle we want to animate
   const obstacle = useRef();
@@ -85,7 +101,7 @@ function BlockLimbo({ position = [0, 0, 0] }) {
   // console.log(obstacle);
   //save speed in state
   const [timeOffset] = useState(
-    () => Math.random() * Math.PI * 2 //prevent the speed from being too slow; make rotation go both ways
+    () => Math.random() * Math.PI * 2 //prevent the speed from being too slow
   );
 
   //update the animation on each frame
@@ -132,13 +148,68 @@ function BlockLimbo({ position = [0, 0, 0] }) {
     </group>
   );
 }
+function BlockAxe({ position = [0, 0, 0] }) {
+  //create reference to the obstacle we want to animate
+  const obstacle = useRef();
+  // console.log(obstacle);
+  //save speed in state
+  const [timeOffset] = useState(
+    () => Math.random() * Math.PI * 2 //prevent the speed from being too slow
+  );
+
+  //update the animation on each frame
+  useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+
+    const x = Math.sin(time + timeOffset) * 1.25; // this will make it go right at the edge
+    obstacle.current.setNextKinematicTranslation({
+      x: position[0] + x,
+      y: position[1] + 0.75,
+      z: position[2],
+    });
+  });
+  return (
+    <group position={position}>
+      {/**
+       * Floor
+       */}
+      <mesh
+        geometry={boxGeometry}
+        material={floor2Material}
+        position={[0, -0.1, 0]}
+        receiveShadow
+        scale={[4, 0.2, 4]}
+      />
+      {/**
+       * moving obstacle
+       */}
+      <RigidBody
+        ref={obstacle}
+        type="kinematicPosition"
+        position={[0, 0.3, 0]}
+        restitution={0.2}
+        friction={0}
+      >
+        <mesh
+          geometry={boxGeometry}
+          material={obstacleMaterial}
+          scale={[1.5, 1.5, 0.3]}
+          castShadow
+          receiveShadow
+        />
+      </RigidBody>
+    </group>
+  );
+}
 
 export default function Level() {
   return (
     <>
-      <BlockStart position={[0, 0, 8]} />
-      <BLockSpinner position={[0, 0, 4]} />
-      <BlockLimbo position={[0, 0, 0]} />
+      <BlockStart position={[0, 0, 16]} />
+      <BLockSpinner position={[0, 0, 12]} />
+      <BlockLimbo position={[0, 0, 8]} />
+      <BlockAxe position={[0, 0, 4]} />
+      <BlockEnd position={[0, 0, 0]} />
     </>
   );
 }
