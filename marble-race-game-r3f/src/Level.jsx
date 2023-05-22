@@ -35,7 +35,7 @@ function BLockSpinner({ position = [0, 0, 0] }) {
   const obstacle = useRef();
   //save speed in state
   const [speed] = useState(
-    () => Math.random() + 0.2 //prevent the speed from being too slow
+    () => (Math.random() + 0.2) * (Math.random() < 0.5 ? -1 : 1) //prevent the speed from being too slow; make rotation go both ways
   );
 
   //update the animation on each frame
@@ -58,6 +58,9 @@ function BLockSpinner({ position = [0, 0, 0] }) {
         receiveShadow
         scale={[4, 0.2, 4]}
       />
+      {/**
+       * moving obstacle
+       */}
       <RigidBody
         ref={obstacle}
         type="kinematicPosition"
