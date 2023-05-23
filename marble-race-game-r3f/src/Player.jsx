@@ -1,10 +1,15 @@
 import { RigidBody, useRapier } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 
 export default function Player() {
+  //state to help with lerping(linear interpolation)
+  //the 10, 10, 10 values will add a nice animation
+  const [smoothCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10)); // will be created just once
+  const [smoothCameraTarget] = useState(() => new THREE.Vector3());
+
   const [subscribeKeys, getKeys] = useKeyboardControls();
   //world variable contains an abstraction of the actual Rapier world
   const { rapier, world } = useRapier();
@@ -92,9 +97,13 @@ export default function Player() {
     const cameraTarget = new THREE.Vector3();
     cameraTarget.copy(ballPosition);
     cameraTarget.y += 0.25;
+
+    //lerping/linear interpolation- camera will become more realistic and smoother
+    smoothCameraPosition.lerp(cameraPosition, 5 * delta);
+    smoothCameraTarget.lerp(cameraTarget, 5 * delta);
     //tell the camera to copy the camera position and to look at above the marble
-    state.camera.position.copy(cameraPosition);
-    state.camera.lookAt(cameraTarget);
+    state.camera.position.copy(smoothCameraPosition);
+    state.camera.lookAt(smoothCameraTarget);
   });
   return (
     <>
