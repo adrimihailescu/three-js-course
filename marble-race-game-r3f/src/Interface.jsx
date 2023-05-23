@@ -3,6 +3,7 @@ import useGame from "./stores/useGame";
 
 export default function Interface() {
   const restart = useGame((state) => state.restart);
+  const phase = useGame((state) => state.phase);
   //object containing all inputs as properties where each key is true or false, depending on whether or not the key is pressed
   const forward = useKeyboardControls((state) => state.forward);
   const backward = useKeyboardControls((state) => state.backward);
@@ -12,9 +13,11 @@ export default function Interface() {
   return (
     <div className="interface">
       <div className="time">0.00</div>
-      <div className="restart" onClick={restart}>
-        Restart
-      </div>
+      {phase === "ended" && (
+        <div className="restart" onClick={restart}>
+          Restart
+        </div>
+      )}
       <div className="controls">
         <div className="raw">
           <div className={`key ${forward ? "active" : ""}`}></div>
