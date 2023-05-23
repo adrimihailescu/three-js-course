@@ -14,6 +14,7 @@ export default function Player() {
   //selector
   const start = useGame((state) => state.start);
   const end = useGame((state) => state.end);
+  const restart = useGame((state) => state.restart);
   const blocksCount = useGame((state) => state.blocksCount);
 
   const [subscribeKeys, getKeys] = useKeyboardControls();
@@ -43,7 +44,18 @@ export default function Player() {
       // console.log("yes,Jump!");
     }
   };
+
+  const reset = () => {
+    console.log("reset");
+  };
   useEffect(() => {
+    const unsubscribeReset = useGame.subscribe(
+      (state) => state.phase,
+      (value) => {
+        // console.log("phase changed to", value);
+        if (value === "ready") reset();
+      }
+    );
     const unsubscribeJump = subscribeKeys(
       (state) => state.jump,
       (value) => {
@@ -56,11 +68,14 @@ export default function Player() {
     const unsubscribeAny = subscribeKeys(() => {
       start();
     });
+    //cleaning up the events
     return () => {
       unsubscribeJump();
-      unsubscribeAny(); //cleaning up the events
+      unsubscribeAny();
+      unsubscribeReset();
     };
   }, []);
+
   useFrame((state, delta) => {
     //Controls
     //get the keys
@@ -119,8 +134,14 @@ export default function Player() {
     /**
      * Phases
      */
+    //check if we've reached the end of the level-checking on each frame
     if (ballPosition.z < -(blocksCount * 4 + 2)) {
       end();
+    }
+    //if the ball falls outside the level, it will restart
+    if (ballPosition.y < -4) {
+      console.log("restart");
+      restart();
     }
   });
   return (
