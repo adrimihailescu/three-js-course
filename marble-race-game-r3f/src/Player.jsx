@@ -46,7 +46,9 @@ export default function Player() {
   };
 
   const reset = () => {
-    console.log("reset");
+    ball.current.setTranslation({ x: 0, y: 1, z: 0 });
+    ball.current.setLinvel({ x: 0, y: 0, z: 0 });
+    ball.current.setAngvel({ x: 0, y: 0, z: 0 });
   };
   useEffect(() => {
     const unsubscribeReset = useGame.subscribe(
