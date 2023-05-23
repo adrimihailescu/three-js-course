@@ -3,12 +3,18 @@ import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
+import useGame from "./stores/useGame";
 
 export default function Player() {
   //state to help with lerping(linear interpolation)
   //the 10, 10, 10 values will add a nice animation
   const [smoothCameraPosition] = useState(() => new THREE.Vector3(10, 10, 10)); // will be created just once
   const [smoothCameraTarget] = useState(() => new THREE.Vector3());
+
+  //selector
+  const start = useGame((state) => state.start);
+  const end = useGame((state) => state.end);
+  const blocksCount = useGame((state) => state.blocksCount);
 
   const [subscribeKeys, getKeys] = useKeyboardControls();
   //world variable contains an abstraction of the actual Rapier world
@@ -46,8 +52,13 @@ export default function Player() {
         }
       }
     );
+
+    const unsubscribeAny = subscribeKeys(() => {
+      start();
+    });
     return () => {
       unsubscribeJump();
+      unsubscribeAny(); //cleaning up the events
     };
   }, []);
   useFrame((state, delta) => {
@@ -104,6 +115,13 @@ export default function Player() {
     //tell the camera to copy the camera position and to look at above the marble
     state.camera.position.copy(smoothCameraPosition);
     state.camera.lookAt(smoothCameraTarget);
+
+    /**
+     * Phases
+     */
+    if (ballPosition.z < -(blocksCount * 4 + 2)) {
+      end();
+    }
   });
   return (
     <>
