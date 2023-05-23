@@ -2,10 +2,11 @@ import { RigidBody, useRapier } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect } from "react";
+import * as THREE from "three";
 
 export default function Player() {
   const [subscribeKeys, getKeys] = useKeyboardControls();
-  //wolrd variable contains an abstraction of the actual Rapier world
+  //world variable contains an abstraction of the actual Rapier world
   const { rapier, world } = useRapier();
   // console.log(rapier);
   // console.log(world);
@@ -45,6 +46,7 @@ export default function Player() {
     };
   }, []);
   useFrame((state, delta) => {
+    //Controls
     //get the keys
     const { forward, backward, leftward, rightward } = getKeys();
 
@@ -76,6 +78,23 @@ export default function Player() {
 
     ball.current.applyImpulse(impulse);
     ball.current.applyTorqueImpulse(torque);
+
+    //Camera
+    //retrieve the ball position with translation()
+    const ballPosition = ball.current.translation();
+    //create the camera and copy the marble position so that the camera moves with the marble
+    const cameraPosition = new THREE.Vector3();
+    cameraPosition.copy(ballPosition);
+    cameraPosition.z += 2.25;
+    cameraPosition.y += 0.65;
+
+    //create a camera target, slightly above the marble so we can see the whole level (lookAt())
+    const cameraTarget = new THREE.Vector3();
+    cameraTarget.copy(ballPosition);
+    cameraTarget.y += 0.25;
+    //tell the camera to copy the camera position and to look at above the marble
+    state.camera.position.copy(cameraPosition);
+    state.camera.lookAt(cameraTarget);
   });
   return (
     <>
