@@ -1,24 +1,38 @@
-import { RigidBody } from "@react-three/rapier";
+import { RigidBody, useRapier } from "@react-three/rapier";
 import { useFrame } from "@react-three/fiber";
 import { useKeyboardControls } from "@react-three/drei";
 import { useRef, useEffect } from "react";
 
 export default function Player() {
   const [subscribeKeys, getKeys] = useKeyboardControls();
+  //wolrd variable contains an abstraction of the actual Rapier world
+  const { rapier, world } = useRapier();
+  // console.log(rapier);
+  // console.log(world);
+  //the original/native rapier world needed for ray casting
+  const rapierWorld = world.raw();
+  // console.log(rapierWorld);
+
   //create reference to the ball/marble so we can interact with it
   const ball = useRef();
 
   const jump = () => {
     //calculate the origin of the ball or how hight it is from the floor
     const origin = ball.current.translation();
-    origin.y -= 0.31;
-    //
+    origin.y -= 0.31; // the sphere radius is 0.3 ; below the ball
 
-    // console.log("yes,Jump!");
-    ball.current.applyImpulse({ x: 0, y: 0.5, z: 0 }); //make the ball jump
+    //direction
+    const direction = { x: 0, y: -1, z: 0 };
+    const ray = new rapier.Ray(origin, direction);
+    const hit = rapierWorld.castRay(ray, 10, true);
+    // console.log(hit);
+    if (hit?.toi < 0.15) {
+      ball.current.applyImpulse({ x: 0, y: 0.5, z: 0 }); //make the ball jump
+      // console.log("yes,Jump!");
+    }
   };
   useEffect(() => {
-    subscribeKeys(
+    const unsubscribeJump = subscribeKeys(
       (state) => state.jump,
       (value) => {
         if (value) {
@@ -26,6 +40,9 @@ export default function Player() {
         }
       }
     );
+    return () => {
+      unsubscribeJump();
+    };
   }, []);
   useFrame((state, delta) => {
     //get the keys
