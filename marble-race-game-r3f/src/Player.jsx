@@ -45,6 +45,7 @@ export default function Player() {
     }
   };
 
+  //this will reset the game
   const reset = () => {
     ball.current.setTranslation({ x: 0, y: 1, z: 0 });
     ball.current.setLinvel({ x: 0, y: 0, z: 0 });
