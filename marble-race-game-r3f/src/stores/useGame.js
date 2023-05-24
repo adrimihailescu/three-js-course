@@ -5,7 +5,8 @@ export default create(
   subscribeWithSelector((set) => {
     //subscribeWithSelector makes available subscription to the store
     return {
-      blocksCount: 3,
+      blocksCount: 10,
+      blockSeed: 0,
       //time
       startTime: 0,
       endTime: 0,
@@ -22,7 +23,7 @@ export default create(
       restart: () => {
         set((state) => {
           if (state.phase === "playing" || state.phase === "ended")
-            return { phase: "ready" };
+            return { phase: "ready", blockSeed: Math.random() };
 
           return {};
         });

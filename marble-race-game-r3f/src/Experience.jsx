@@ -9,13 +9,16 @@ export default function Experience() {
   const blocksCount = useGame((state) => {
     return state.blocksCount;
   });
+  const blockSeed = useGame((state) => {
+    return state.blockSeed;
+  });
   return (
     <>
       {/* <OrbitControls makeDefault /> */}
       <Physics>
         {/* <Debug /> */}
         <Lights />
-        <Level count={blocksCount} />
+        <Level count={blocksCount} seed={blockSeed} />
         <Player />
       </Physics>
     </>

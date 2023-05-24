@@ -259,6 +259,7 @@ function Bounds({ length = 1 }) {
 export function Level({
   count = 5,
   types = [BLockSpinner, BlockAxe, BlockLimbo],
+  seed = 0,
 }) {
   //create the trap blocks
   // const count = 5
@@ -273,7 +274,7 @@ export function Level({
       blocks.push(type);
     }
     return blocks;
-  }, [count, types]);
+  }, [count, types, seed]);
 
   return (
     <>

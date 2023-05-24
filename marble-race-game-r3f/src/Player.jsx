@@ -143,7 +143,7 @@ export default function Player() {
     }
     //if the ball falls outside the level, it will restart
     if (ballPosition.y < -4) {
-      console.log("restart");
+      // console.log("restart");
       restart();
     }
   });
