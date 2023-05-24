@@ -2,7 +2,7 @@ import { RigidBody, CuboidCollider } from "@react-three/rapier";
 import * as THREE from "three";
 import { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Float, Text } from "@react-three/drei";
 
 //deactivate legacyMode on Three.js to set the same encoding for R3F
 THREE.ColorManagement.legacyMode = false;
@@ -18,6 +18,20 @@ const wallMaterial = new THREE.MeshStandardMaterial({ color: "slategrey" });
 export function BlockStart({ position = [0, 0, 0] }) {
   return (
     <group position={position}>
+      <Float floatIntensity={0.25} rotationIntensity={0.25}>
+        <Text
+          scale={0.5}
+          font="./bebas-neue-v9-latin-regular.woff"
+          maxWidth={0.25}
+          lineHeight={0.75}
+          textAlign="right"
+          position={[0.75, 0.65, 0]}
+          rotation-y={-0.25}
+        >
+          Marble Race
+          <meshBasicMaterial toneMapped={false} />
+        </Text>
+      </Float>
       {/**
        * Floor
        */}
@@ -40,6 +54,14 @@ export function BlockEnd({ position = [0, 0, 0] }) {
   });
   return (
     <group position={position}>
+      <Text
+        font="./bebas-neue-v9-latin-regular.woff"
+        scale={6}
+        position={[0, 2.35, 2]}
+      >
+        FINISH
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
       {/**
        * Floor
        */}
