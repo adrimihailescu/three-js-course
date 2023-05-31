@@ -45,7 +45,7 @@ export default function Experience() {
         <Text3D
           material={material}
           font="./fonts/helvetiker_regular.typeface.json"
-          sie={0.75}
+          size={0.75}
           height={0.2}
           curveSegments={12}
           bevelEnabled
